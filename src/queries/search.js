@@ -66,11 +66,11 @@ export default async function typesenseSearch(context, connectionArgs, currentAp
     connectionArgs.typesenseSearchParameters.per_page=perPage;
     connectionArgs.typesenseSearchParameters.page=currentPage;
 
-    console.log(connectionArgs.typesenseSearchParameters);
+    
 
     const searchData = await searchtypeSense(connectionArgs.typesenseSearchParameters);
 
-    console.log(searchData);
+    
     const searchDataWithCatalogProducts = searchData.hits.map(hit => {
       
       const catalogProduct = JSON.parse(hit.document.fullDocument);
@@ -82,7 +82,6 @@ export default async function typesenseSearch(context, connectionArgs, currentAp
 
       catalogProduct.pricing.PLN.compareAtPrice = fixComparePrice(catalogProduct.pricing.PLN);
 
-      // console.log(catalogProduct.product.variants, 'VARIANTS')
 
       // Not sure but shuold be rewriteed
       catalogProduct.pricing =  [{code: "PLN", currency:{code: "PLN"}, ...catalogProduct.pricing.PLN}];
