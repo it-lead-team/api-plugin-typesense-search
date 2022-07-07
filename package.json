@@ -26,7 +26,6 @@
   "sideEffects": false,
   "dependencies": {
     "@reactioncommerce/api-utils": "^1.16.9",
-    "flat": "^5.0.2",
     "object-hash": "^3.0.0",
     "typesense": "^1.2.2"
   },

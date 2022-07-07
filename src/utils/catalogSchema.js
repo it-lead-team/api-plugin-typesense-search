@@ -11,7 +11,5 @@ export const catalogSchema = {
       {"name": "originCountry", "type": "string", "facet": true },
       {"name": "vendor", "type": "string", "facet": true },
       {"name": ".*_facet", "type": "auto", "facet": true },
-  
     ],
-    'default_sorting_field': 'pricing.PLN.minPrice',
   }
