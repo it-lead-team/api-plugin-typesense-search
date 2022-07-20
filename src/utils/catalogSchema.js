@@ -7,6 +7,7 @@ export const catalogSchema = {
     'fields': [
       {'name': 'title', 'type': 'string'},
       {'name': 'pricing.PLN.minPrice', 'type': 'float'},
+      {'name': 'populatiry', 'type': 'float'},
       {"name": "tagIds", "type": "string[]", "facet": true },
       {"name": "originCountry", "type": "string", "facet": true },
       {"name": "vendor", "type": "string", "facet": true },
