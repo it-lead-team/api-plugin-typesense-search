@@ -21,7 +21,7 @@ export default async function addToTypesenseCollection(context) {
     "afterPublishProductToCatalog",
     async ({ catalogProduct }) => {
       const filters = {};
-
+      console.log(catalogProduct, 'catalogProduct');
       function collectOptions(options) {
         if (options) {
           for (const option of options) {
