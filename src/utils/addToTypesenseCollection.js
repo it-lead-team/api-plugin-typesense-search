@@ -22,17 +22,16 @@ export default async function addToTypesenseCollection(context) {
     "afterPublishProductToCatalog",
     async ({ catalogProduct }) => {
       const filters = {};
-      const updateSchema = {fields:[
-        {'name': 'updatedAt', 'type': 'string'},
-      ]};
+      const updateSchema = { fields: [{ name: "updatedAt", type: "string" }] };
 
       function collectOptions(options) {
         if (options) {
           for (const option of options) {
-            console.log(option, "OPTION");
             filters[`${option.attributeLabel}_facet`] =
               (filters[`${option.attributeLabel}_facet`] &&
-                filters[`${option.attributeLabel}_facet`].add(option.optionTitle)) ||
+                filters[`${option.attributeLabel}_facet`].add(
+                  option.optionTitle
+                )) ||
               new Set([option.optionTitle]);
             if (option.options) {
               return collectOptions(option.options);
@@ -45,7 +44,9 @@ export default async function addToTypesenseCollection(context) {
       for (const variant of catalogProduct.variants) {
         filters[`${variant.attributeLabel}_facet`] =
           (filters[`${variant.attributeLabel}_facet`] &&
-            filters[`${variant.attributeLabel}_facet`].add(variant.optionTitle)) ||
+            filters[`${variant.attributeLabel}_facet`].add(
+              variant.optionTitle
+            )) ||
           new Set([variant.optionTitle]);
         if (variant.options) {
           collectOptions(variant.options, filters);
@@ -56,7 +57,11 @@ export default async function addToTypesenseCollection(context) {
         filters[`${key}`] = Array.from(filters[key]);
         updateSchema.fields.push({ name: `${key}`, type: "auto", facet: true });
       }
- 
+
+      if (!catalogProduct.populatiry) {
+        catalogProduct.populatiry = 0;
+      }
+
       const searchCatalogProduct = {
         id: catalogProduct._id,
         fullDocument: JSON.stringify(catalogProduct),
@@ -64,7 +69,7 @@ export default async function addToTypesenseCollection(context) {
         tagIds: catalogProduct["tagIds"],
         ...filters,
       };
-    
+
       if (!catalogProduct.isVisible || catalogProduct.isDeleted) {
         try {
           await typesenseclient
@@ -78,9 +83,11 @@ export default async function addToTypesenseCollection(context) {
           );
         }
       } else {
-       
         try {
-          await typesenseclient.collections(TYPESENSE_COLLECTION).documents(searchCatalogProduct._id).update(searchCatalogProduct)
+          await typesenseclient
+            .collections(TYPESENSE_COLLECTION)
+            .documents(searchCatalogProduct._id)
+            .update(searchCatalogProduct);
           Logger.info("Updating the document");
         } catch {
           Logger.info(
